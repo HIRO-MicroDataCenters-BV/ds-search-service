@@ -1,0 +1,6 @@
+apiVersion: v2
+name: server
+description: Web server
+type: application
+version: ""
+appVersion: ""

@@ -1,0 +1,37 @@
+name: Deploy latest version of server
+
+on:
+  workflow_run:
+    workflows: [pages-build-deployment]
+    types:
+      - completed
+
+jobs:
+  deploy_server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Update kube config
+        run: |
+          aws eks update-kubeconfig --role-arn ${{ secrets.EKS_CLUSTER_ROLE_ARN }} --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+          kubectl config set-context --current --namespace=${{ secrets.EKS_CLUSTER_NAMESPACE }}
+
+      - name: Deploy
+        run: |
+          chmod +x ./tools/deploy_k8s.sh
+          ./tools/deploy_k8s.sh "${{ secrets.HELM_REPO_URL }}"
