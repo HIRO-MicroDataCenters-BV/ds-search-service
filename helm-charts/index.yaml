@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  server:
+  - apiVersion: v2
+    appVersion: 0.1.0-dev.2.main.8441741b
+    created: "2025-03-17T14:13:26.932560006Z"
+    description: Web server
+    digest: f64b759b51c483d7020fb65107d3a6ece4c5663980697a15b99d37d3a99d2713
+    name: server
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.1.0-dev.2.main.8441741b.tgz
+    version: 0.1.0-dev.2.main.8441741b
+generated: "2025-03-17T14:13:26.932031132Z"
