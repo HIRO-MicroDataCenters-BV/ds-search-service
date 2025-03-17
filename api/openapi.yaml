@@ -1,13 +1,14 @@
 openapi: 3.1.0
 info:
-  title: Template web service
-  description: This is a template of a web service
+  title: Data Space Search Service
+  description: The Search Service is a service of the Data Space Node, designed to
+    process search queries and aggregate results from decentralized catalogs.
   contact:
     name: HIRO-MicroDataCenters
     email: all-hiro@hiro-microdatacenters.nl
   license:
     name: MIT
-    url: https://github.com/HIRO-MicroDataCenters-BV/template-python/blob/main/LICENSE
+    url: https://github.com/HIRO-MicroDataCenters-BV/ds-search-service/blob/main/LICENSE
   version: 0.1.0
 paths:
   /metrics:
