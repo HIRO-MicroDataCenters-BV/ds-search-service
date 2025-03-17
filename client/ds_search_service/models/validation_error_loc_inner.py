@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Template web service
+    Data Space Search Service
 
-    This is a template of a web service
+    The Search Service is a service of the Data Space Node, designed to process search queries and aggregate results from decentralized catalogs.
 
     The version of the OpenAPI document: 0.1.0
     Contact: all-hiro@hiro-microdatacenters.nl

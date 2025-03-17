@@ -12,9 +12,11 @@ class CustomFastAPI(FastAPI):
         if self.openapi_schema:
             return self.openapi_schema
         openapi_schema = get_openapi(
-            title="Template web service",
+            title="Data Space Search Service",
             version="0.0.0",
-            description="This is a template of a web service",
+            description="The Search Service is a service of the Data Space "
+            "Node, designed to process search queries and aggregate "
+            "results from decentralized catalogs.",
             contact={
                 "name": "HIRO-MicroDataCenters",
                 "email": "all-hiro@hiro-microdatacenters.nl",
@@ -22,7 +24,7 @@ class CustomFastAPI(FastAPI):
             license_info={
                 "name": "MIT",
                 "url": "https://github.com/HIRO-MicroDataCenters-BV"
-                "/template-python/blob/main/LICENSE",
+                "/ds-search-service/blob/main/LICENSE",
             },
             routes=self.routes,
         )
