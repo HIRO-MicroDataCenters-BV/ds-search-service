@@ -2,6 +2,7 @@ README.md
 docs/DefaultApi.md
 docs/ExampleResponse.md
 docs/HTTPValidationError.md
+docs/HealthCheck.md
 docs/Item.md
 docs/ItemsApi.md
 docs/ValidationError.md
@@ -16,6 +17,7 @@ ds_search_service/configuration.py
 ds_search_service/exceptions.py
 ds_search_service/models/__init__.py
 ds_search_service/models/example_response.py
+ds_search_service/models/health_check.py
 ds_search_service/models/http_validation_error.py
 ds_search_service/models/item.py
 ds_search_service/models/validation_error.py

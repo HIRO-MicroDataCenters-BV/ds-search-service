@@ -35,6 +35,7 @@ from ds_search_service.exceptions import ApiException
 # import models into sdk package
 from ds_search_service.models.example_response import ExampleResponse
 from ds_search_service.models.http_validation_error import HTTPValidationError
+from ds_search_service.models.health_check import HealthCheck
 from ds_search_service.models.item import Item
 from ds_search_service.models.validation_error import ValidationError
 from ds_search_service.models.validation_error_loc_inner import ValidationErrorLocInner

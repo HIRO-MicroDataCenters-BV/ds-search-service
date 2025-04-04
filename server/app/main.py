@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from prometheus_fastapi_instrumentator import Instrumentator
 
+from app.rest_api.routes import health_check
+
 from . import example, items
 
 
@@ -40,3 +42,4 @@ Instrumentator().instrument(app).expose(app)
 
 app.include_router(example.router)
 app.include_router(items.routes.router)
+app.include_router(health_check.routes.router)

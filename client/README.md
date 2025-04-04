@@ -117,6 +117,7 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**example_get**](docs/DefaultApi.md#example_get) | **GET** / | Example endpoint
+*DefaultApi* | [**health_check**](docs/DefaultApi.md#health_check) | **GET** /health-check | Health check
 *DefaultApi* | [**metrics_metrics_get**](docs/DefaultApi.md#metrics_metrics_get) | **GET** /metrics | Metrics
 *ItemsApi* | [**items_create**](docs/ItemsApi.md#items_create) | **POST** /item/ | Create an item
 *ItemsApi* | [**items_delete_item**](docs/ItemsApi.md#items_delete_item) | **DELETE** /item/{id}/ | Delete an item
@@ -129,6 +130,7 @@ Class | Method | HTTP request | Description
 
  - [ExampleResponse](docs/ExampleResponse.md)
  - [HTTPValidationError](docs/HTTPValidationError.md)
+ - [HealthCheck](docs/HealthCheck.md)
  - [Item](docs/Item.md)
  - [ValidationError](docs/ValidationError.md)
  - [ValidationErrorLocInner](docs/ValidationErrorLocInner.md)
