@@ -19,6 +19,8 @@ fastapi = "^0.109"
 uvicorn = "^0.26"
 classy-fastapi = "^0.6.1"
 prometheus-fastapi-instrumentator = "^6.1.0"
+pyld = "^2.0.4"
+rdflib = "^7.1.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12"
