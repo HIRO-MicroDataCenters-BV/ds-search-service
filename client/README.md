@@ -102,7 +102,7 @@ with ds_search_service.ApiClient(configuration) as api_client:
     catalog_filters = ds_search_service.CatalogFilters() # CatalogFilters | 
 
     try:
-        # Search Local Catalog
+        # Decentralized Search Across Catalogs
         api_response = api_instance.decentralized_search(catalog_filters)
         print("The response of DecentralizedSearchApi->decentralized_search:\n")
         pprint(api_response)
@@ -117,7 +117,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DecentralizedSearchApi* | [**decentralized_search**](docs/DecentralizedSearchApi.md#decentralized_search) | **POST** /search/ | Search Local Catalog
+*DecentralizedSearchApi* | [**decentralized_search**](docs/DecentralizedSearchApi.md#decentralized_search) | **POST** /search/ | Decentralized Search Across Catalogs
 *LocalSearchApi* | [**search_catalog**](docs/LocalSearchApi.md#search_catalog) | **POST** /search-catalog/ | Search Local Catalog
 *DefaultApi* | [**health_check**](docs/DefaultApi.md#health_check) | **GET** /health-check | Health check
 *DefaultApi* | [**metrics_metrics_get**](docs/DefaultApi.md#metrics_metrics_get) | **GET** /metrics | Metrics

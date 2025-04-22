@@ -275,7 +275,7 @@ class SearchRoutes(Routable):
     @post(
         "/search/",
         operation_id="decentralized_search",
-        name="Search Local Catalog",
+        name="Decentralized Search across catalogs",
         tags=[Tags.Decentralized_search],
         response_class=JSONLDResponse,
         responses={

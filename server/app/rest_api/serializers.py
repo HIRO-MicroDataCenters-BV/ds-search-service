@@ -2,8 +2,6 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from app.core import entities
-
 from .examples import catalog_filters_example
 
 
@@ -33,7 +31,3 @@ class CatalogFilters(JsonLD):
             ],
         },
     }
-
-    def to_entity(self) -> entities.CatalogFilters:
-        d = self.model_dump_json(by_alias=True)
-        return entities.CatalogFilters.from_json_ld(d)
