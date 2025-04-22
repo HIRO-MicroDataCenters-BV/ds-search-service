@@ -98,15 +98,16 @@ configuration = ds_search_service.Configuration(
 # Enter a context with an instance of the API client
 with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = ds_search_service.DefaultApi(api_client)
+    api_instance = ds_search_service.DecentralizedSearchApi(api_client)
+    catalog_filters = ds_search_service.CatalogFilters() # CatalogFilters | 
 
     try:
-        # Example endpoint
-        api_response = api_instance.example_get()
-        print("The response of DefaultApi->example_get:\n")
+        # Search Local Catalog
+        api_response = api_instance.decentralized_search(catalog_filters)
+        print("The response of DecentralizedSearchApi->decentralized_search:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling DefaultApi->example_get: %s\n" % e)
+        print("Exception when calling DecentralizedSearchApi->decentralized_search: %s\n" % e)
 
 ```
 
@@ -116,22 +117,17 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**example_get**](docs/DefaultApi.md#example_get) | **GET** / | Example endpoint
+*DecentralizedSearchApi* | [**decentralized_search**](docs/DecentralizedSearchApi.md#decentralized_search) | **POST** /search/ | Search Local Catalog
+*LocalSearchApi* | [**search_catalog**](docs/LocalSearchApi.md#search_catalog) | **POST** /search-catalog/ | Search Local Catalog
 *DefaultApi* | [**health_check**](docs/DefaultApi.md#health_check) | **GET** /health-check | Health check
 *DefaultApi* | [**metrics_metrics_get**](docs/DefaultApi.md#metrics_metrics_get) | **GET** /metrics | Metrics
-*ItemsApi* | [**items_create**](docs/ItemsApi.md#items_create) | **POST** /item/ | Create an item
-*ItemsApi* | [**items_delete_item**](docs/ItemsApi.md#items_delete_item) | **DELETE** /item/{id}/ | Delete an item
-*ItemsApi* | [**items_read_all**](docs/ItemsApi.md#items_read_all) | **GET** /item/ | Read all items
-*ItemsApi* | [**items_read_item**](docs/ItemsApi.md#items_read_item) | **GET** /item/{id}/ | Read an item
-*ItemsApi* | [**items_update_item**](docs/ItemsApi.md#items_update_item) | **PUT** /item/{id}/ | Update an item
 
 
 ## Documentation For Models
 
- - [ExampleResponse](docs/ExampleResponse.md)
+ - [CatalogFilters](docs/CatalogFilters.md)
  - [HTTPValidationError](docs/HTTPValidationError.md)
  - [HealthCheck](docs/HealthCheck.md)
- - [Item](docs/Item.md)
  - [ValidationError](docs/ValidationError.md)
  - [ValidationErrorLocInner](docs/ValidationErrorLocInner.md)
 

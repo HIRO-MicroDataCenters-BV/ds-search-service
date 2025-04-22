@@ -5,8 +5,7 @@ import os
 import socket
 
 import httpx
-
-from app.core.entities import Graph  # Ensure Graph is imported
+from rdflib import Graph
 
 from ..rest_api.serializers import CatalogFilters
 
@@ -59,19 +58,28 @@ class SearchUsecases:
         Query the local catalog with the given filters and limit.
         """
         # Convert the Pydantic model to a dictionary (JSON-LD format)
+        print("############################query", query)
         query_jsonld = query.model_dump()
+        # Define headers
+        headers = {
+            "accept": "application/ld+json",  # Specify JSON-LD content type
+            "Content-Type": "application/json",  # Example of an authorization header
+        }
         # Implement the logic to query the local catalog
         async with httpx.AsyncClient() as client:
             try:
-                response = await client.get(
-                    f"{self.catalog_service_url}/get_catalog",
-                    params=query_jsonld,
+                response = await client.post(
+                    f"{self.catalog_service_url}/catalog/",
+                    json=query_jsonld,
+                    headers=headers,
                     timeout=float(self.request_timeout),
                 )
                 response.raise_for_status()
                 # Parse the JSON-LD response into a Graph instance
-                return Graph.from_json_ld(json.dumps(response.json()))
-            except httpx.RequestError as exc:
+                rdf_graph = Graph()
+                rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
+                return rdf_graph
+            except Exception as exc:
                 print(f"Local catalog query failed: {exc}")
                 # Return an empty Graph instance in case of failure
                 return Graph()
@@ -82,30 +90,42 @@ class SearchUsecases:
         """
         # Convert the Pydantic model to a dictionary (JSON-LD format)
         query_jsonld = query.model_dump()
-
+        # Define headers
+        headers = {
+            "accept": "application/ld+json",  # Specify JSON-LD content type
+            "Content-Type": "application/json",  # Example of an authorization header
+        }
         # Implement the logic to query the peer catalogs
         async with httpx.AsyncClient() as client:
             try:
-                response = await client.get(
-                    f"{url}/search_catalog",
-                    params=query_jsonld,
+                response = await client.post(
+                    f"{url}/search_catalog/",
+                    json=query_jsonld,
+                    headers=headers,
                     timeout=float(self.request_timeout),
                 )
                 response.raise_for_status()
                 # Parse the JSON-LD response into a Graph instance
-                return Graph.from_json_ld(json.dumps(response.json()))
-            except httpx.RequestError as exc:
+                rdf_graph = Graph()
+                rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
+                return rdf_graph
+            except Exception as exc:
                 print(f"Peer catalog query failed: {exc}")
                 # Return an empty Graph instance in case of failure
                 return Graph()
 
-    async def aggregate_catalog_responses(self, query: CatalogFilters) -> Graph:
+    async def aggregate_catalog_responses(self, query: CatalogFilters) -> List[Graph]:
         """
-        Aggregate responses from the local catalog
-        and peer services.
+        Aggregate responses from the local catalog and peer services.
+        Returns a list of Graph objects containing all aggregated results.
         """
+        print("Starting aggregation")
+
         # Query the local catalog
         local_response = await self.query_local_catalog(query)
+        print(
+            "################local_response", local_response.serialize(format="json-ld")
+        )
 
         # Discover and query peer services
         peer_services = await self.discover_peer_services()
@@ -113,35 +133,9 @@ class SearchUsecases:
             await self.query_peer_services(url, query) for url in peer_services
         ]
 
-        # Initialize the @graph list
-        graph = []
+        # Combine all responses into a list of Graphs
+        aggregated_graphs = [local_response] if local_response else []
+        aggregated_graphs.extend(peer_responses)
 
-        # Add the local response to the @graph if it has content
-        if local_response:
-            graph.append(json.loads(local_response.to_json_ld()))
-
-        # Add peer responses to the @graph if they have content
-        for peer_response in peer_responses:
-            if peer_response:
-                graph.append(json.loads(peer_response.to_json_ld()))
-
-        # Define the @context
-        context = {
-            "@vocab": "http://data-space.org/",
-            "xsd": "http://www.w3.org/2001/XMLSchema#",
-            "dcat": "http://www.w3.org/ns/dcat#",
-            "dcatap": "http://data.europa.eu/r5r/",
-            "dcterms": "http://purl.org/dc/terms/",
-            "spdx": "http://spdx.org/rdf/terms#",
-            "foaf": "http://xmlns.com/foaf/0.1/",
-            "skos": "http://www.w3.org/2004/02/skos/core#",
-        }
-
-        # Construct the final JSON-LD response
-        aggregated_response = {
-            "@context": context,
-            "@graph": graph,
-        }
-
-        # Parse the aggregated response into a Graph instance
-        return Graph.from_json_ld(json.dumps(aggregated_response))
+        print("################Aggregated graphs count:", len(aggregated_graphs))
+        return aggregated_graphs

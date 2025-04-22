@@ -21,6 +21,7 @@ classy-fastapi = "^0.6.1"
 prometheus-fastapi-instrumentator = "^6.1.0"
 pyld = "^2.0.4"
 rdflib = "^7.1.4"
+email-validator = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12"
