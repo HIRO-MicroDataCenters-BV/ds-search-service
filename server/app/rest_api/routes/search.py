@@ -7,7 +7,7 @@ from app.core import entities, usecases
 
 from ..depends import get_user
 from ..examples import catalog_filters_example, decentralized_catalog_filters_example
-from ..response import Frame, JSONLDResponse
+from ..response import JSONLDResponse
 from ..serializers import CatalogFilters
 from ..tags import Tags
 
@@ -268,7 +268,6 @@ class SearchRoutes(Routable):
         print("type", type(response))
         return JSONLDResponse(
             content=response,
-            frame=Frame.SINGLE,
             status_code=200,
         )
 
@@ -518,7 +517,6 @@ class SearchRoutes(Routable):
         responses = await usecases.aggregate_catalog_responses(filters)
         return JSONLDResponse(
             content=responses,  # Pass a list of graphs
-            frame=Frame.MULTIPLE,  # Apply the MULTIPLE frame
             status_code=200,
         )
 

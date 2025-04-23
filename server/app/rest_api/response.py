@@ -1,16 +1,16 @@
-from typing import Any
+from typing import Any, List
 
-import json  # Import JSON for parsing serialized JSON-LD
-from enum import Enum
+import json
 
 from fastapi import Response
-from rdflib import Graph as RDFGraph
+from pyld import jsonld
+from rdflib import Graph
 from rdflib.namespace import DCAT, DCTERMS, FOAF, SKOS, XSD
 
 from ..core.namespace import DCATAP, DSPACE, SPDX
 
 CONTEXT = {
-    "dspace": str(DSPACE),
+    "@vocab": str(DSPACE),
     "xsd": str(XSD),
     "dcat": str(DCAT),
     "dcatap": str(DCATAP),
@@ -21,71 +21,32 @@ CONTEXT = {
 }
 
 
-class Frame(Enum):
-    SINGLE = {
-        "@context": CONTEXT,
-        "@type": {},
-    }
-    MULTIPLE = {
-        "@context": CONTEXT,
-    }
-
-
 class JSONLDResponse(Response):
     media_type = "application/ld+json"
 
     def __init__(
         self,
-        content: Any,  # Accept either a single Graph or a list of Graphs
+        content: Graph | List[Graph],
         status_code: int = 200,
         headers: dict[str, str] | None = None,
-        frame: Frame | None = None,  # Use the Frame enum
         **kwargs: Any,
     ) -> None:
-        # Handle single graph case
-        if isinstance(content, RDFGraph):
-            # Serialize the single graph to JSON-LD
-            json_ld_data = content.serialize(format="json-ld", indent=4)
-            json_ld_dict = json.loads(json_ld_data)
+        res = None
+        if isinstance(content, Graph):
+            res = self.to_json_ld(content)
 
-            # Ensure json_ld_dict is a dictionary
-            if isinstance(json_ld_dict, list) and len(json_ld_dict) == 1:
-                # If the serialized data is a list with one item, extract the item
-                json_ld_dict = json_ld_dict[0]
+        elif isinstance(content, list) and all(
+            isinstance(item, Graph) for item in content
+        ):
+            all_graphs = []
 
-            # Add @context at the top level
-            json_ld_dict["@context"] = {"@vocab": str(DSPACE), **CONTEXT}
-            self.content = json_ld_dict
+            for single_graph in content:
+                if single_graph:
+                    graph_res = self.to_json_ld(single_graph)
+                    graph_res.pop("@context", None)
+                    all_graphs.append(graph_res)
 
-        # Handle multiple graphs case (including empty list)
-        elif isinstance(content, list):
-            aggregated_graph = RDFGraph()
-
-            # Combine all graphs into a single aggregated graph
-            for graph in content:
-                if isinstance(graph, RDFGraph):
-                    aggregated_graph += graph
-
-            # Serialize the aggregated graph to JSON-LD
-            json_ld_data = aggregated_graph.serialize(format="json-ld", indent=4)
-            json_ld_dict = json.loads(json_ld_data)
-
-            # Ensure json_ld_dict is a dictionary
-            if isinstance(json_ld_dict, list):
-                json_ld_dict = {"@graph": json_ld_dict}
-
-            # Remove @context from each item in the @graph
-            graph_items = json_ld_dict.get("@graph", [])
-            for item in graph_items:
-                if "@context" in item:
-                    del item["@context"]
-
-            # Construct the final JSON-LD response
-            final_json_ld = {
-                "@context": {"@vocab": str(DSPACE), **CONTEXT},
-                "@graph": graph_items,
-            }
-            self.content = final_json_ld
+            res = {"@context": CONTEXT, "@graph": all_graphs}
 
         else:
             raise Exception(
@@ -93,11 +54,23 @@ class JSONLDResponse(Response):
                 "or a list of rdflib.Graph objects."
             )
 
+        # Serialize the final content
         super().__init__(
-            content=json.dumps(
-                self.content, indent=4
-            ),  # Serialize the JSON-LD back to a string
+            content=json.dumps(res, indent=4),
             status_code=status_code,
             headers=headers,
             **kwargs,
         )
+
+    def to_json_ld(self, graph: Graph) -> dict[str, Any]:
+        """
+        Convert the RDF graph to JSON-LD format.
+        """
+        frame = {"@context": CONTEXT, "@type": "dcat:Catalog"}
+        json_ld_str = graph.serialize(format="json-ld")
+        json_ld = json.loads(json_ld_str)
+        try:
+            framed_result = jsonld.frame(json_ld, frame)
+            return dict(framed_result)
+        except Exception as e:
+            raise ValueError(f"Framing failed: {e}")
