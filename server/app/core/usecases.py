@@ -132,9 +132,10 @@ class SearchUsecases:
         peer_responses = [
             await self.query_peer_services(url, query) for url in peer_services
         ]
+        print("peer_responses length", len(peer_responses))
 
         # Combine all responses into a list of Graphs
-        aggregated_graphs = [local_response] if local_response else []
+        aggregated_graphs = [local_response]
         aggregated_graphs.extend(peer_responses)
 
         print("################Aggregated graphs count:", len(aggregated_graphs))
