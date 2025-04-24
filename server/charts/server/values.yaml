@@ -7,7 +7,7 @@ image:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "search-service"
 
 serviceAccount:
   create: true
@@ -22,17 +22,34 @@ podSecurityContext: {}
 
 securityContext: {}
 
+container:
+  command: ["uvicorn"]
+  args: ["app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 resources: {}
 
 livenessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /health-check/
+    port: 8080
 readinessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /health-check/
+    port: 8080
+
+env:
+  - name: POD_NAMESPACE
+    value: "nextgen"
+  - name: SERVICE_NAME
+    value: "search-service"
+  - name: SERVICE_PORT
+    value: "8000"
+  - name: CATALOG_SERVICE_URL
+    value: "http://catalog-service:8001"
+  - name: REQUEST_TIMEOUT
+    value: "5.0"
