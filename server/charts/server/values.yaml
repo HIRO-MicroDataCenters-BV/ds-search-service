@@ -7,7 +7,7 @@ image:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: "search-service"
+fullnameOverride: "ds-search"
 
 serviceAccount:
   create: true
@@ -46,10 +46,10 @@ env:
   - name: POD_NAMESPACE
     value: "nextgen"
   - name: SERVICE_NAME
-    value: "search-service"
+    value: "ds-search"
   - name: SERVICE_PORT
-    value: "8000"
+    value: "8080"
   - name: CATALOG_SERVICE_URL
-    value: "http://catalog-service:8001"
+    value: "http://ds-catalog:8081"
   - name: REQUEST_TIMEOUT
     value: "5.0"
