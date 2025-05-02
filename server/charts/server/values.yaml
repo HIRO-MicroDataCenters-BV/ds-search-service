@@ -53,3 +53,13 @@ env:
     value: "http://ds-catalog:8081"
   - name: REQUEST_TIMEOUT
     value: "5.0"
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+deploymentMode: daemonset  # or "deployment"
