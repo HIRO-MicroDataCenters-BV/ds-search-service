@@ -5,21 +5,22 @@ metadata:
   name: {{ include "app.fullname" . }}-search
   namespace: nextgen
   labels:
-    app: {{ include "app.name" . }}-search
+    app: {{ include "app.fullname" . }}-search
 spec:
   selector:
     matchLabels:
-      app: {{ include "app.name" . }}-search
+      app: {{ include "app.fullname" . }}-search
   template:
     metadata:
       labels:
-        app: {{ include "app.name" . }}-search
+        app: {{ include "app.fullname" . }}-search
+        {{- include "app.selectorLabels" . | nindent 8 }}
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      {{- with .Values.image.pullSecret }}
+      {{- if .Values.image.pullSecret }}
       imagePullSecrets:
-        - name: {{ . }}
+        - name: {{ .Values.image.pullSecret }}
       {{- end }}
       serviceAccountName: {{ include "app.serviceAccountName" . }}
       affinity:
@@ -33,14 +34,16 @@ spec:
         #   requiredDuringSchedulingIgnoredDuringExecution:
         #     - labelSelector:
         #         matchLabels:
-        #           app: {{ include "app.name" . }}
+        #           app: {{ include "app.fullname" . }}
         #       topologyKey: kubernetes.io/hostname
       containers:
         - name: search
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: {{ toYaml .Values.container.command | nindent 12 }}
-          args:    {{ toYaml .Values.container.args | nindent 12 }}
+          command:
+            {{- toYaml .Values.container.command | nindent 12 }}
+          args:
+            {{- toYaml .Values.container.args | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -54,10 +57,10 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}

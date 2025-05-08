@@ -99,7 +99,7 @@ class SearchUsecases:
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
-                    f"{url}/search_catalog/",
+                    f"{url}/search-catalog/",
                     json=query_jsonld,
                     headers=headers,
                     timeout=float(self.request_timeout),

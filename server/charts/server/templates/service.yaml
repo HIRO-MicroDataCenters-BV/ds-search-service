@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "app.labels" . | nindent 4 }}
 spec:
+  clusterIP: None # headless service
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
