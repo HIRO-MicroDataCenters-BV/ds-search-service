@@ -129,6 +129,8 @@ class SearchUsecases:
 
         # Discover and query peer services
         peer_services = await self.discover_peer_services()
+        print("peer_services_length", len(peer_services))
+        print("peer_services", peer_services)
         peer_responses = [
             await self.query_peer_services(url, query) for url in peer_services
         ]

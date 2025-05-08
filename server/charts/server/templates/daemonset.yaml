@@ -1,76 +1,63 @@
 {{- if eq .Values.deploymentMode "daemonset" }}
-# This is a DaemonSet
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "app.fullname" . }}
+  name: {{ include "app.fullname" . }}-search
+  namespace: nextgen
   labels:
-    {{- include "app.labels" . | nindent 4 }}
+    app: {{ include "app.name" . }}-search
 spec:
   selector:
     matchLabels:
-      {{- include "app.selectorLabels" . | nindent 6 }}
+      app: {{ include "app.name" . }}-search
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "app.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app: {{ include "app.name" . }}-search
     spec:
-      {{- with .Values.imagePullSecrets }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- with .Values.image.pullSecret }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+        - name: {{ . }}
       {{- end }}
       serviceAccountName: {{ include "app.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       affinity:
-        {{- if .Values.affinity }}
-        {{- toYaml .Values.affinity | nindent 8 }}
-        {{- else }}
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  # Exclude control-plane nodes
                   - key: node-role.kubernetes.io/control-plane
                     operator: DoesNotExist
-        {{- end }}
+        # podAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #     - labelSelector:
+        #         matchLabels:
+        #           app: {{ include "app.name" . }}
+        #       topologyKey: kubernetes.io/hostname
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+        - name: search
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: {{ .Values.container.command }}
-          args:
-            {{- toYaml .Values.container.args | nindent 12 }}
+          command: {{ toYaml .Values.container.command | nindent 12 }}
+          args:    {{ toYaml .Values.container.args | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+              hostPort: {{ .Values.service.port }}
           env:
             {{- range .Values.env }}
             - name: {{ .name }}
-              value: "{{ .value }}"
+              value: {{ .value | quote }}
             {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
 {{- end }}

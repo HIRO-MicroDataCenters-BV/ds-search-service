@@ -50,7 +50,7 @@ env:
   - name: SERVICE_PORT
     value: "8080"
   - name: CATALOG_SERVICE_URL
-    value: "http://ds-catalog:8081"
+    value: "http://127.0.0.1:8081"
   - name: REQUEST_TIMEOUT
     value: "5.0"
 
