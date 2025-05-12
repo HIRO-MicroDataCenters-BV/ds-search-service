@@ -2,43 +2,35 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "app.fullname" . }}-search
-  namespace: nextgen
+  name: {{ include "app.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
-    app: {{ include "app.fullname" . }}-search
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ include "app.fullname" . }}-search
+      {{- include "app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "app.fullname" . }}-search
         {{- include "app.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      {{- if .Values.image.pullSecret }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.image.pullSecret }}
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/control-plane
-                    operator: DoesNotExist
-        # podAffinity:
-        #   requiredDuringSchedulingIgnoredDuringExecution:
-        #     - labelSelector:
-        #         matchLabels:
-        #           app: {{ include "app.fullname" . }}
-        #       topologyKey: kubernetes.io/hostname
+        {{- toYaml .Values.affinity | nindent 8 }}
       containers:
-        - name: search
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - name: {{ include "app.name" . }}
+          image: "{{ include "app.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             {{- toYaml .Values.container.command | nindent 12 }}

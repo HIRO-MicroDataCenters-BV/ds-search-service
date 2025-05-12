@@ -1,12 +1,16 @@
+# Chart values for ds-search
 replicaCount: 1
 
 image:
   repository: ""
   tag: ""
   pullPolicy: IfNotPresent
+  pullSecret: ""
 
-imagePullSecrets: []
-nameOverride: ""
+# Optional: override the namespace; defaults to release namespace
+namespace: nextgen
+
+nameOverride: "ds-search"
 fullnameOverride: "ds-search"
 
 serviceAccount:
@@ -19,19 +23,11 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext: {}
-
 securityContext: {}
 
 container:
   command: ["uvicorn"]
   args: ["app.main:app", "--host", "0.0.0.0", "--port", "8080"]
-
-
-service:
-  type: ClusterIP
-  port: 8080
-
-resources: {}
 
 livenessProbe:
   httpGet:
@@ -41,6 +37,11 @@ readinessProbe:
   httpGet:
     path: /health-check/
     port: 8080
+
+
+service:
+  type: ClusterIP
+  port: 8080
 
 env:
   - name: POD_NAMESPACE
@@ -63,3 +64,16 @@ resources:
     cpu: "500m"
 
 deploymentMode: daemonset  # or "deployment"
+
+# Affinity block example (override if needed)
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: DoesNotExist
+
+# Optional nodeSelector & tolerations
+nodeSelector: {}
+tolerations: []
