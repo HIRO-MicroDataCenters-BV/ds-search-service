@@ -27,9 +27,11 @@ class CatalogFilters(BaseModel):
     """
     CatalogFilters
     """ # noqa: E501
-    context: Optional[Dict[str, Any]] = Field(default=None, alias="@context")
+    context: Dict[str, Any] = Field(alias="@context")
+    type: Optional[Any] = Field(alias="@type")
+    filters: Optional[Any]
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["@context"]
+    __properties: ClassVar[List[str]] = ["@context", "@type", "filters"]
 
     model_config = {
         "populate_by_name": True,
@@ -77,6 +79,16 @@ class CatalogFilters(BaseModel):
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
 
+        # set to None if type (nullable) is None
+        # and model_fields_set contains the field
+        if self.type is None and "type" in self.model_fields_set:
+            _dict['@type'] = None
+
+        # set to None if filters (nullable) is None
+        # and model_fields_set contains the field
+        if self.filters is None and "filters" in self.model_fields_set:
+            _dict['filters'] = None
+
         return _dict
 
     @classmethod
@@ -89,7 +101,9 @@ class CatalogFilters(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "@context": obj.get("@context")
+            "@context": obj.get("@context"),
+            "@type": obj.get("@type"),
+            "filters": obj.get("filters")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

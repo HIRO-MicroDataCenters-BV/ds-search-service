@@ -615,8 +615,20 @@ components:
         '@context':
           type: object
           title: '@Context'
+        '@type':
+          type: string
+          title: '@Type'
+        filters:
+          items:
+            type: object
+          type: array
+          title: Filters
       additionalProperties: true
       type: object
+      required:
+      - '@context'
+      - '@type'
+      - filters
       title: CatalogFilters
       examples:
       - '@context':

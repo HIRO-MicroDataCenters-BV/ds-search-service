@@ -59,7 +59,8 @@ class SearchUsecases:
         """
         # Convert the Pydantic model to a dictionary (JSON-LD format)
         print("############################query", query)
-        query_jsonld = query.model_dump()
+        query_jsonld = query.model_dump(by_alias=True)
+        print("############################query_jsonld", query_jsonld)
         # Define headers
         headers = {
             "accept": "application/ld+json",  # Specify JSON-LD content type
@@ -74,6 +75,7 @@ class SearchUsecases:
                     headers=headers,
                     timeout=float(self.request_timeout),
                 )
+                print("############################response", response)
                 response.raise_for_status()
                 # Parse the JSON-LD response into a Graph instance
                 rdf_graph = Graph()

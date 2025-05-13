@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field
 
@@ -22,9 +22,13 @@ class JsonLD(BaseModel):
 
 
 class CatalogFilters(JsonLD):
-    # TODO: Validate the data
+    # Define JSON-LD fields with proper aliases
+    context: Dict[str, Any] = Field(..., alias="@context")
+    type: str = Field(..., alias="@type")
+    filters: List[Dict[str, Any]]
 
     model_config = {
+        "populate_by_name": True,
         "json_schema_extra": {
             "examples": [
                 catalog_filters_example,

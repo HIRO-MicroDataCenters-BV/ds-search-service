@@ -5,7 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**context** | **object** |  | [optional] 
+**context** | **object** |  | 
+**type** | **object** |  | 
+**filters** | **object** |  | 
 
 ## Example
 
