@@ -164,22 +164,22 @@ dataset_body_example: dict[str, Any] = {
 }
 
 catalog_filters_example: dict[str, Any] = {
-    "@context": context_example,
-    "@id": "https://example.com/catalog/123",
-    "@type": "dcat:Catalog",
-    "dcterms:title": {"@language": "en", "@value": "Sample Catalog"},
-    "dcterms:description": {
-        "@language": "en",
-        "@value": "This is a sample catalog containing "
-        "various datasets and services.",
+    "@context": {
+        "@vocab": "http://data-space.org/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "med": "http://oca.example.org/123/",
     },
-    "dcterms:publisher": {
-        "@id": "https://example.com/person/123",
-        "@type": "foaf:Agent",
-        "foaf:name": "John Doe",
-    },
-    "dcat:dataset": [
-        dataset_body_example,
+    "@type": "Filters",
+    "filters": [
+        {
+            "dcat:dataset": {
+                "extraMetadata": {
+                    "@type": "med:Record",
+                    "med:hasAsthma": True,
+                    "med:hasSex": True,
+                }
+            }
+        }
     ],
 }
 
