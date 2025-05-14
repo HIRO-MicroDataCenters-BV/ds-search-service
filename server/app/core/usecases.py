@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 import json
 import logging
@@ -55,6 +55,34 @@ class SearchUsecases:
             logger.error(f"Error discovering peer services: {e}")
             return []
 
+    async def _post_catalog_query(
+        self, url: str, endpoint: str, query_jsonld: dict[str, Any], log_prefix: str
+    ) -> Graph:
+        """
+        Internal helper to POST a catalog query and parse the JSON-LD
+        response into an RDF Graph.
+        """
+        headers = {
+            "accept": "application/ld+json",
+            "Content-Type": "application/json",
+        }
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(
+                    f"{url}{endpoint}",
+                    json=query_jsonld,
+                    headers=headers,
+                    timeout=float(self.request_timeout),
+                )
+                response.raise_for_status()
+                rdf_graph = Graph()
+                rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
+                logger.info(f"{log_prefix}Successfully queried {url}{endpoint}")
+                return rdf_graph
+            except Exception as exc:
+                logger.error(f"{log_prefix}Query failed at {url}{endpoint}: {exc}")
+                return Graph()
+
     async def query_local_catalog(self, query: CatalogFilters) -> Graph:
         """
         Query the local catalog with the given filters and limit.
@@ -62,26 +90,9 @@ class SearchUsecases:
         logger.info("Querying local catalog")
         query_jsonld = query.model_dump(by_alias=True)
         logger.debug(f"Query JSON-LD: {query_jsonld}")
-        headers = {
-            "accept": "application/ld+json",
-            "Content-Type": "application/json",
-        }
-        async with httpx.AsyncClient() as client:
-            try:
-                response = await client.post(
-                    f"{self.catalog_service_url}/catalog/",
-                    json=query_jsonld,
-                    headers=headers,
-                    timeout=float(self.request_timeout),
-                )
-                response.raise_for_status()
-                rdf_graph = Graph()
-                rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
-                logger.info("Successfully queried local catalog")
-                return rdf_graph
-            except Exception as exc:
-                logger.error(f"Local catalog query failed: {exc}")
-                return Graph()
+        return await self._post_catalog_query(
+            self.catalog_service_url, "/catalog/", query_jsonld, "Local catalog: "
+        )
 
     async def query_peer_services(self, url: str, query: CatalogFilters) -> Graph:
         """
@@ -89,26 +100,10 @@ class SearchUsecases:
         """
         logger.info(f"Querying peer service at {url}")
         query_jsonld = query.model_dump(by_alias=True)
-        headers = {
-            "accept": "application/ld+json",
-            "Content-Type": "application/json",
-        }
-        async with httpx.AsyncClient() as client:
-            try:
-                response = await client.post(
-                    f"{url}/search-catalog/",
-                    json=query_jsonld,
-                    headers=headers,
-                    timeout=float(self.request_timeout),
-                )
-                response.raise_for_status()
-                rdf_graph = Graph()
-                rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
-                logger.info(f"Successfully queried peer service at {url}")
-                return rdf_graph
-            except Exception as exc:
-                logger.error(f"Peer catalog query failed at {url}: {exc}")
-                return Graph()
+        logger.debug(f"Query JSON-LD: {query_jsonld}")
+        return await self._post_catalog_query(
+            url, "/search-catalog/", query_jsonld, f"Peer service at {url}: "
+        )
 
     async def aggregate_catalog_responses(self, query: CatalogFilters) -> List[Graph]:
         """
