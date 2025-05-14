@@ -22,6 +22,16 @@ entries:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.1.0-dev.33.feature-decentra.22b3fb6a.tgz
     version: 0.1.0-dev.33.feature-decentra.22b3fb6a
   - apiVersion: v2
+    appVersion: 0.1.0-dev.32.decentralized-se.c48d47da
+    created: "2025-05-14T14:33:00.319403759Z"
+    description: Web server
+    digest: 5d2c83b52341a7b403f878d19edf099e656d8952f7591fd995ef0574f438377e
+    name: server
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.1.0-dev.32.decentralized-se.c48d47da.tgz
+    version: 0.1.0-dev.32.decentralized-se.c48d47da
+  - apiVersion: v2
     appVersion: 0.1.0-dev.31.feature-decentra.1f2016bf
     created: "2025-05-14T13:41:54.530301358Z"
     description: Web server
@@ -81,4 +91,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-05-14T14:32:54.121322956Z"
+generated: "2025-05-14T14:33:00.318854373Z"
