@@ -54,6 +54,8 @@ env:
     value: "http://127.0.0.1:8081"
   - name: REQUEST_TIMEOUT
     value: "5.0"
+  - name : LOG_LEVEL
+    value: "INFO"
 
 resources:
   requests:
