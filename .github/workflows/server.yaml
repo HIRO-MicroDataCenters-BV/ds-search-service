@@ -15,7 +15,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  Docker_IMAGE_NAME: hiro-microdatacenters-bv/ds-search-service
 
 jobs:
   test_server:
