@@ -80,9 +80,6 @@ def test_search_catalog(mock_get_usecases, mock_get_user):
     # Make the request
     response = client.post("/search-catalog/", json=filters)
 
-    # Debugging: Check if the mock was called
-    print("#######Mocked usecases", mock_usecases.query_local_catalog.call_args_list)
-
     # Assertions
     assert response.status_code == 200
     assert "@context" in response.json()

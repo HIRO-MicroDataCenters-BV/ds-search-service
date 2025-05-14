@@ -1,6 +1,7 @@
 from typing import List
 
 import json
+import logging
 import os
 import socket
 
@@ -8,6 +9,9 @@ import httpx
 from rdflib import Graph
 
 from ..rest_api.serializers import CatalogFilters
+
+# Module-level logger
+logger = logging.getLogger(__name__)
 
 
 class SearchUsecases:
@@ -25,13 +29,11 @@ class SearchUsecases:
         Get the current IP address of the machine.
         """
         try:
-            # Get the hostname of the machine
             hostname = socket.gethostname()
-            # Get the IP address using the hostname
             ip_address = socket.gethostbyname(hostname)
+            logger.info(f"Resolved IP address: {ip_address}")
         except socket.gaierror:
-            # Handle the case where the hostname could not be resolved
-            print("Error: Unable to resolve hostname")
+            logger.error("Error: Unable to resolve hostname")
             return "Unable to get IP address"
         return ip_address
 
@@ -44,29 +46,26 @@ class SearchUsecases:
             _, _, ips = socket.gethostbyname_ex(
                 f"{self.service_name}.{self.namespace}.svc.cluster.local"
             )
-            # Filter out the current pod IP
-            return [
+            peer_services = [
                 f"http://{ip}:{self.service_port}" for ip in ips if ip != current_ip
             ]
+            logger.info(f"Discovered peer services: {peer_services}")
+            return peer_services
         except Exception as e:
-            # Handle any exceptions that occur during the discovery process
-            print(f"Error discovering peer services: {e}")
+            logger.error(f"Error discovering peer services: {e}")
             return []
 
     async def query_local_catalog(self, query: CatalogFilters) -> Graph:
         """
         Query the local catalog with the given filters and limit.
         """
-        # Convert the Pydantic model to a dictionary (JSON-LD format)
-        print("############################query", query)
+        logger.info("Querying local catalog")
         query_jsonld = query.model_dump(by_alias=True)
-        print("############################query_jsonld", query_jsonld)
-        # Define headers
+        logger.debug(f"Query JSON-LD: {query_jsonld}")
         headers = {
-            "accept": "application/ld+json",  # Specify JSON-LD content type
-            "Content-Type": "application/json",  # Example of an authorization header
+            "accept": "application/ld+json",
+            "Content-Type": "application/json",
         }
-        # Implement the logic to query the local catalog
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
@@ -75,29 +74,25 @@ class SearchUsecases:
                     headers=headers,
                     timeout=float(self.request_timeout),
                 )
-                print("############################response", response)
                 response.raise_for_status()
-                # Parse the JSON-LD response into a Graph instance
                 rdf_graph = Graph()
                 rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
+                logger.info("Successfully queried local catalog")
                 return rdf_graph
             except Exception as exc:
-                print(f"Local catalog query failed: {exc}")
-                # Return an empty Graph instance in case of failure
+                logger.error(f"Local catalog query failed: {exc}")
                 return Graph()
 
     async def query_peer_services(self, url: str, query: CatalogFilters) -> Graph:
         """
         Query the peer search services with the given filters and limit.
         """
-        # Convert the Pydantic model to a dictionary (JSON-LD format)
+        logger.info(f"Querying peer service at {url}")
         query_jsonld = query.model_dump()
-        # Define headers
         headers = {
-            "accept": "application/ld+json",  # Specify JSON-LD content type
-            "Content-Type": "application/json",  # Example of an authorization header
+            "accept": "application/ld+json",
+            "Content-Type": "application/json",
         }
-        # Implement the logic to query the peer catalogs
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
@@ -107,13 +102,12 @@ class SearchUsecases:
                     timeout=float(self.request_timeout),
                 )
                 response.raise_for_status()
-                # Parse the JSON-LD response into a Graph instance
                 rdf_graph = Graph()
                 rdf_graph.parse(data=json.dumps(response.json()), format="json-ld")
+                logger.info(f"Successfully queried peer service at {url}")
                 return rdf_graph
             except Exception as exc:
-                print(f"Peer catalog query failed: {exc}")
-                # Return an empty Graph instance in case of failure
+                logger.error(f"Peer catalog query failed at {url}: {exc}")
                 return Graph()
 
     async def aggregate_catalog_responses(self, query: CatalogFilters) -> List[Graph]:
@@ -121,26 +115,23 @@ class SearchUsecases:
         Aggregate responses from the local catalog and peer services.
         Returns a list of Graph objects containing all aggregated results.
         """
-        print("Starting aggregation")
+        logger.info("Starting aggregation of catalog responses")
 
         # Query the local catalog
         local_response = await self.query_local_catalog(query)
-        print(
-            "################local_response", local_response.serialize(format="json-ld")
-        )
+        logger.debug(f"Local response: {local_response.serialize(format='json-ld')}")
 
         # Discover and query peer services
         peer_services = await self.discover_peer_services()
-        print("peer_services_length", len(peer_services))
-        print("peer_services", peer_services)
+        logger.info(f"Discovered {len(peer_services)} peer services: {peer_services}")
         peer_responses = [
             await self.query_peer_services(url, query) for url in peer_services
         ]
-        print("peer_responses length", len(peer_responses))
+        logger.info(f"Received {len(peer_responses)} responses from peer services")
 
         # Combine all responses into a list of Graphs
         aggregated_graphs = [local_response]
         aggregated_graphs.extend(peer_responses)
 
-        print("################Aggregated graphs count:", len(aggregated_graphs))
+        logger.info(f"Aggregated {len(aggregated_graphs)} graphs in total")
         return aggregated_graphs
