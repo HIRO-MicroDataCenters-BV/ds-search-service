@@ -88,7 +88,7 @@ class SearchUsecases:
         Query the peer search services with the given filters and limit.
         """
         logger.info(f"Querying peer service at {url}")
-        query_jsonld = query.model_dump()
+        query_jsonld = query.model_dump(by_alias=True)
         headers = {
             "accept": "application/ld+json",
             "Content-Type": "application/json",
