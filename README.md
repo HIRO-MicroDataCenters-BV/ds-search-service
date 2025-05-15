@@ -60,7 +60,7 @@ A package of the client will be available at pypi.org.
 The Docker image will be available at `https://github.com/hiro-microdatacenters-bv/ds-search-service/pkgs/container/ds-search-service`.
 
 ## Act
-You can run your GitHub Actions locally using https://github.com/nektos/act. 
+You can run your GitHub Actions locally  using https://github.com/nektos/act. 
 
 Usage example:
 ```bash

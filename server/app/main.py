@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from . import example, items
+from app.logging_config import setup_logging
+from app.rest_api.routes import health_check, search
 
 
 class CustomFastAPI(FastAPI):
@@ -32,11 +33,12 @@ class CustomFastAPI(FastAPI):
         return self.openapi_schema
 
 
-app = CustomFastAPI()
+setup_logging()
 
+app = CustomFastAPI()
 
 Instrumentator().instrument(app).expose(app)
 
 
-app.include_router(example.router)
-app.include_router(items.routes.router)
+app.include_router(health_check.routes.router)
+app.include_router(search.routes.router)

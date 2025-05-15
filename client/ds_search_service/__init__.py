@@ -18,8 +18,9 @@
 __version__ = "1.0.0"
 
 # import apis into sdk package
+from ds_search_service.api.decentralized_search_api import DecentralizedSearchApi
+from ds_search_service.api.local_search_api import LocalSearchApi
 from ds_search_service.api.default_api import DefaultApi
-from ds_search_service.api.items_api import ItemsApi
 
 # import ApiClient
 from ds_search_service.api_response import ApiResponse
@@ -33,8 +34,8 @@ from ds_search_service.exceptions import ApiAttributeError
 from ds_search_service.exceptions import ApiException
 
 # import models into sdk package
-from ds_search_service.models.example_response import ExampleResponse
+from ds_search_service.models.catalog_filters import CatalogFilters
 from ds_search_service.models.http_validation_error import HTTPValidationError
-from ds_search_service.models.item import Item
+from ds_search_service.models.health_check import HealthCheck
 from ds_search_service.models.validation_error import ValidationError
 from ds_search_service.models.validation_error_loc_inner import ValidationErrorLocInner

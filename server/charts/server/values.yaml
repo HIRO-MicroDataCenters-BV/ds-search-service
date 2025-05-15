@@ -1,13 +1,17 @@
+# Chart values for ds-search
 replicaCount: 1
 
 image:
   repository: ""
   tag: ""
   pullPolicy: IfNotPresent
+  pullSecret: ""
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+# Optional: override the namespace; defaults to release namespace
+namespace: nextgen
+
+nameOverride: "ds-search"
+fullnameOverride: "ds-search"
 
 serviceAccount:
   create: true
@@ -19,20 +23,59 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext: {}
-
 securityContext: {}
 
-service:
-  type: ClusterIP
-  port: 80
-
-resources: {}
+container:
+  command: ["uvicorn"]
+  args: ["app.main:app", "--host", "0.0.0.0", "--port", "8080"]
 
 livenessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /health-check/
+    port: 8080
 readinessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /health-check/
+    port: 8080
+
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  - name: POD_NAMESPACE
+    value: "nextgen"
+  - name: SERVICE_NAME
+    value: "ds-search"
+  - name: SERVICE_PORT
+    value: "8080"
+  - name: CATALOG_SERVICE_URL
+    value: "http://127.0.0.1:8081"
+  - name: REQUEST_TIMEOUT
+    value: "5.0"
+  - name : LOG_LEVEL
+    value: "INFO"
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+deploymentMode: daemonset  # or "deployment"
+
+# Affinity block example (override if needed)
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: DoesNotExist
+
+# Optional nodeSelector & tolerations
+nodeSelector: {}
+tolerations: []
