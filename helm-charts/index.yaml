@@ -12,6 +12,16 @@ entries:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.1.0.tgz
     version: 0.1.0
   - apiVersion: v2
+    appVersion: 0.1.0-dev.39.feature-ingress.968cb3b9
+    created: "2025-05-27T08:46:49.91146349Z"
+    description: Web server
+    digest: e17def0bfbc80f0cfd731bbfc60da3bff47719f977324fd3f9b7c7a279f4ea14
+    name: server
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.1.0-dev.39.feature-ingress.968cb3b9.tgz
+    version: 0.1.0-dev.39.feature-ingress.968cb3b9
+  - apiVersion: v2
     appVersion: 0.1.0-dev.38.feature-ingress.06edc0d0
     created: "2025-05-27T07:56:30.555992814Z"
     description: Web server
@@ -171,4 +181,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-05-27T07:56:30.555384636Z"
+generated: "2025-05-27T08:46:49.910877237Z"
