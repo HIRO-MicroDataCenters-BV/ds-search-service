@@ -178,7 +178,10 @@ async def test_aggregate_catalog_responses():
     ) as mock_query_peer_services:
         mock_query_peer_services.return_value = mock_peer_response
         result = await usecases.aggregate_catalog_responses(mock_query)
-        assert len(result) == 3  # 1 local response + 2 peer responses
+        # assert len(result) == 3  # 1 local response + 2 peer responses
+        assert (
+            len(result) == 2
+        )  # 2 peer responses only, local response is not included in the list
         assert all(isinstance(graph, Graph) for graph in result)
         assert "@context" in mock_response
         assert "@graph" in mock_response
