@@ -113,8 +113,8 @@ class SearchUsecases:
         logger.info("Starting aggregation of catalog responses")
 
         # Query the local catalog
-        local_response = await self.query_local_catalog(query)
-        logger.debug(f"Local response: {local_response.serialize(format='json-ld')}")
+        # local_response = await self.query_local_catalog(query)
+        # logger.debug(f"Local response: {local_response.serialize(format='json-ld')}")
 
         # Discover and query peer services
         peer_services = await self.discover_peer_services()
@@ -125,7 +125,8 @@ class SearchUsecases:
         logger.info(f"Received {len(peer_responses)} responses from peer services")
 
         # Combine all responses into a list of Graphs
-        aggregated_graphs = [local_response]
+        # aggregated_graphs = [local_response]
+        aggregated_graphs = []
         aggregated_graphs.extend(peer_responses)
 
         logger.info(f"Aggregated {len(aggregated_graphs)} graphs in total")
