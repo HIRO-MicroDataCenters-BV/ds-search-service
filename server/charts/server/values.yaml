@@ -79,3 +79,10 @@ affinity:
 # Optional nodeSelector & tolerations
 nodeSelector: {}
 tolerations: []
+
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodes:
+    - nodeId: node1
+    - nodeId: node2
+    - nodeId: node3
