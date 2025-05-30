@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from prometheus_fastapi_instrumentator import Instrumentator
 
@@ -36,6 +37,13 @@ class CustomFastAPI(FastAPI):
 setup_logging()
 
 app = CustomFastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Instrumentator().instrument(app).expose(app)
 
