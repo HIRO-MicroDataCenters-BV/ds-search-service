@@ -42,25 +42,25 @@ During the build and publish process, a Docker image is built, a Helm chart is c
 
 **Initial setup**  
 1. Create the branch gh-pages and use it as a GitHub page https://pages.github.com/.  
-2. Set up variables at `https://github.com/<workspace>/<project>/settings/variables/actions`:
+2. Set up variables at `https://github.com/hiro-microdatacenters-bv/ds-search-service/settings/variables/actions`:
 - `DOCKER_IMAGE_NAME` - The name of the Docker image for uploading to the repository.
-3. Set up secrets at `https://github.com/<workspace>/<project>/settings/secrets/actions`:
+3. Set up secrets at `https://github.com/hiro-microdatacenters-bv/ds-search-service/settings/secrets/actions`:
 - `AWS_ACCESS_KEY_ID` - AWS Access Key ID. https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
 - `AWS_SECRET_ACCESS_KEY` - AWS Secret Access Key
 - `AWS_REGION` - AWS region. https://aws.amazon.com/about-aws/global-infrastructure/regions_az/
 - `EKS_CLUSTER_ROLE_ARN` - The IAM role's ARN in AWS, providing permissions for managing an Amazon EKS Kubernetes cluster.
 - `EKS_CLUSTER_NAME` - Amazon EKS Kubernetes cluster name.
 - `EKS_CLUSTER_NAMESPACE` - Amazon EKS Kubernetes cluster namespace.
-- `HELM_REPO_URL` - `https://<workspace>.github.io/<project>/helm-charts/`
+- `HELM_REPO_URL` - `https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts/`
 - `PYPI_TOKEN` - The secret token for PyPI. https://pypi.org/help/#apitoken
 
 **After execution**  
-The index.yaml file containing the list of Helm charts will be available at `https://<workspace>.github.io/<project>/helm-charts/index.yaml`. You can this URL on https://artifacthub.io/.  
+The index.yaml file containing the list of Helm charts will be available at `https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts/index.yaml`. You can this URL on https://artifacthub.io/.  
 A package of the client will be available at pypi.org.  
-The Docker image will be available at `https://github.com/orgs/<workspace>/packages?repo_name=<project>`.
+The Docker image will be available at `https://github.com/hiro-microdatacenters-bv/ds-search-service/pkgs/container/ds-search-service`.
 
 ## Act
-You can run your GitHub Actions locally using https://github.com/nektos/act. 
+You can run your GitHub Actions locally  using https://github.com/nektos/act. 
 
 Usage example:
 ```bash

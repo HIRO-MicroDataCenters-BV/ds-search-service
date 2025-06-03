@@ -133,6 +133,31 @@ helm upgrade --install <release_name> <repo_name>/<chart_name>
 
 https://helm.sh/ru/docs/
 
+## Deployment
+1. Label the nodes:
+```bash
+kubectl label nodes <node> node-id=node1
+kubectl label nodes <node> node-id=node2
+kubectl label nodes <node> node-id=node3
+```
+2. Define ingress.host and ingress.nodes in values.yaml:
+```bash
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodes:
+    - nodeId: node1
+    - nodeId: node2
+    - nodeId: node3
+```
+3. Deploy the Helm chart:
+```bash
+helm install ds-search <repo_name>/<chart_name> -f values.yaml
+```
+4. The search service will be available at:
+   * https://ds-search.node1.nextgen.hiro-develop.nl
+   * https://ds-search.node2.nextgen.hiro-develop.nl
+   * https://ds-search.node3.nextgen.hiro-develop.nl
+
 ## OpenaAPI schema
 To manually generate the OpenAPI schema, execute the command from the project root folder:
 ```bash
