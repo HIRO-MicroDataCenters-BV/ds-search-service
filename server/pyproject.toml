@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "ds-search-service"
-version = "0.0.0"
+version = "0.2.0"
 description = "The Search Service is a service of the Data Space Node, designed to process search queries and aggregate results from decentralized catalogs."
 readme = "README.md"
 authors = ["HIRO-MicroDataCenters <all-hiro@hiro-microdatacenters.nl>"]
