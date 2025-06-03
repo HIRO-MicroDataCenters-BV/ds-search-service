@@ -1,10 +1,12 @@
 from typing import Any, Dict
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from . import example, items
+from app.logging_config import setup_logging
+from app.rest_api.routes import health_check, search
 
 
 class CustomFastAPI(FastAPI):
@@ -13,7 +15,7 @@ class CustomFastAPI(FastAPI):
             return self.openapi_schema
         openapi_schema = get_openapi(
             title="Data Space Search Service",
-            version="0.0.0",
+            version="0.2.0",
             description="The Search Service is a service of the Data Space "
             "Node, designed to process search queries and aggregate "
             "results from decentralized catalogs.",
@@ -32,11 +34,19 @@ class CustomFastAPI(FastAPI):
         return self.openapi_schema
 
 
-app = CustomFastAPI()
+setup_logging()
 
+app = CustomFastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Instrumentator().instrument(app).expose(app)
 
 
-app.include_router(example.router)
-app.include_router(items.routes.router)
+app.include_router(health_check.routes.router)
+app.include_router(search.routes.router)
