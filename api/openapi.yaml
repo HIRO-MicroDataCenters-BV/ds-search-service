@@ -9,7 +9,7 @@ info:
   license:
     name: MIT
     url: https://github.com/HIRO-MicroDataCenters-BV/ds-search-service/blob/main/LICENSE
-  version: 0.1.0
+  version: 0.2.0
 paths:
   /metrics:
     get:

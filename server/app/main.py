@@ -15,7 +15,7 @@ class CustomFastAPI(FastAPI):
             return self.openapi_schema
         openapi_schema = get_openapi(
             title="Data Space Search Service",
-            version="0.0.0",
+            version="0.2.0",
             description="The Search Service is a service of the Data Space "
             "Node, designed to process search queries and aggregate "
             "results from decentralized catalogs.",
