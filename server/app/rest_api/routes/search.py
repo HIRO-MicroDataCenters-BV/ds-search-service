@@ -5,7 +5,8 @@ import logging
 from classy_fastapi import Routable, post
 from fastapi import Depends
 
-from app.core import entities, usecases
+from app.core import discovery, entities, usecases
+from app.settings import get_settings
 
 from ..depends import get_user
 from ..examples import catalog_filters_example, decentralized_catalog_filters_example
@@ -16,17 +17,36 @@ from ..tags import Tags
 logger = logging.getLogger(__name__)
 
 
-def get_usecases():
-    """
-    Dependency to get the usecases instance.
-    """
-    return usecases.SearchUsecases()
+def get_usecases(settings=get_settings()):
+    """Dependency to get the usecases instance"""
+
+    discovery_service: discovery.IDiscoveryService
+
+    if settings.discovery_type == "dummy":
+        discovery_service = discovery.DummyDiscoveryService(
+            search_service_urls=settings.dummy_search_service_urls,
+        )
+    elif settings.discovery_type == "kube":
+        discovery_service = discovery.KubeDiscoveryService(
+            namespace=settings.pod_namespace,
+            service_name=settings.service_name,
+            service_port=settings.service_port,
+        )
+    else:
+        logger.error(f"Unsupported discovery type: {settings.discovery_type}")
+        raise ValueError(f"Unsupported discovery type: {settings.discovery_type}")
+
+    return usecases.SearchUsecases(
+        discovery_service=discovery_service,
+        catalog_service_url=settings.catalog_service_url,
+        request_timeout=settings.request_timeout,
+    )
 
 
 class SearchRoutes(Routable):
     @post(
-        "/search-catalog/",
-        operation_id="search_catalog",
+        "/local-search/",
+        operation_id="local_search",
         name="Search Local Catalog",
         tags=[Tags.Local_search],
         response_class=JSONLDResponse,
@@ -41,7 +61,7 @@ class SearchRoutes(Routable):
             }
         },
     )
-    async def search_catalog(
+    async def local_search(
         self,
         filters: CatalogFilters,
         user: Annotated[entities.Person, Depends(get_user)],
@@ -62,17 +82,14 @@ class SearchRoutes(Routable):
 
         """
         logger.info("Received request to search the local catalog")
-        response = await usecases.query_local_catalog(filters)
+        response = await usecases.local_search(filters)
         logger.info("Successfully queried the local catalog")
         logger.debug(f"Response type: {type(response)}, Response: {response}")
-        return JSONLDResponse(
-            content=response,
-            status_code=200,
-        )
+        return JSONLDResponse(content=response, status_code=200)
 
     @post(
-        "/search/",
-        operation_id="decentralized_search",
+        "/distributed-search/",
+        operation_id="distributed_search",
         name="Decentralized Search across catalogs",
         tags=[Tags.Decentralized_search],
         response_class=JSONLDResponse,
@@ -87,7 +104,7 @@ class SearchRoutes(Routable):
             }
         },
     )
-    async def search_across_catalogs(
+    async def distributed_search(
         self,
         filters: CatalogFilters,
         user: Annotated[entities.Person, Depends(get_user)],
@@ -107,13 +124,10 @@ class SearchRoutes(Routable):
 
         """
         logger.info("Received request to perform decentralized search across catalogs")
-        responses = await usecases.aggregate_catalog_responses(filters)
+        responses = await usecases.distributed_search(filters)
         logger.info("Successfully aggregated responses from catalogs")
         logger.debug(f"Aggregated responses: {responses}")
-        return JSONLDResponse(
-            content=responses,  # Pass a list of graphs
-            status_code=200,
-        )
+        return JSONLDResponse(content=responses, status_code=200)
 
 
 routes = SearchRoutes()

@@ -44,15 +44,15 @@ service:
   port: 8080
 
 env:
-  - name: POD_NAMESPACE
+  - name: DS_SEARCH__POD_NAMESPACE
     value: "nextgen"
-  - name: SERVICE_NAME
+  - name: DS_SEARCH__SERVICE_NAME
     value: "ds-search"
-  - name: SERVICE_PORT
+  - name: DS_SEARCH__SERVICE_PORT
     value: "8080"
-  - name: CATALOG_SERVICE_URL
+  - name: DS_SEARCH__CATALOG_SERVICE_URL
     value: "http://127.0.0.1:8081"
-  - name: REQUEST_TIMEOUT
+  - name: DS_SEARCH__DISCOVERY_TYPE
     value: "5.0"
   - name : LOG_LEVEL
     value: "INFO"

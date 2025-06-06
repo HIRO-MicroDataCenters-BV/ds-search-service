@@ -17,7 +17,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from ds_search_service.models.catalog_filters import CatalogFilters
+from typing import Any, Dict, Optional
 
 from ds_search_service.api_client import ApiClient, RequestSerialized
 from ds_search_service.api_response import ApiResponse
@@ -38,9 +38,10 @@ class LocalSearchApi:
 
 
     @validate_call
-    def search_catalog(
+    def local_search(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -58,8 +59,10 @@ class LocalSearchApi:
 
         Search the local catalog with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation.  https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html#tag/Catalog/operation/get_catalog
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -82,8 +85,9 @@ class LocalSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_catalog_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._local_search_serialize(
+            request_body=request_body,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -106,9 +110,10 @@ class LocalSearchApi:
 
 
     @validate_call
-    def search_catalog_with_http_info(
+    def local_search_with_http_info(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -126,8 +131,10 @@ class LocalSearchApi:
 
         Search the local catalog with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation.  https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html#tag/Catalog/operation/get_catalog
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -150,8 +157,9 @@ class LocalSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_catalog_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._local_search_serialize(
+            request_body=request_body,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -174,9 +182,10 @@ class LocalSearchApi:
 
 
     @validate_call
-    def search_catalog_without_preload_content(
+    def local_search_without_preload_content(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -194,8 +203,10 @@ class LocalSearchApi:
 
         Search the local catalog with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation.  https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html#tag/Catalog/operation/get_catalog
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -218,8 +229,9 @@ class LocalSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_catalog_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._local_search_serialize(
+            request_body=request_body,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -237,9 +249,10 @@ class LocalSearchApi:
         return response_data.response
 
 
-    def _search_catalog_serialize(
+    def _local_search_serialize(
         self,
-        catalog_filters,
+        request_body,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -260,11 +273,15 @@ class LocalSearchApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if catalog_filters is not None:
-            _body_params = catalog_filters
+        if request_body is not None:
+            _body_params = request_body
 
 
         # set the HTTP header `Accept`
@@ -295,7 +312,7 @@ class LocalSearchApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/search-catalog/',
+            resource_path='/local-search/',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
