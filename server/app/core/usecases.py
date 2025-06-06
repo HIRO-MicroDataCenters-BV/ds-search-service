@@ -99,7 +99,7 @@ class SearchUsecases(ISearchUsecases):
         result_graph = Graph()
         for url in peer_services:
             service_graph = await self._query_peer_services(
-                url, "/search-catalog/", query
+                url, "/local-search/", query
             )
             result_graph += service_graph
 

@@ -52,7 +52,7 @@ env:
     value: "8080"
   - name: DS_SEARCH__CATALOG_SERVICE_URL
     value: "http://127.0.0.1:8081"
-  - name: DS_SEARCH__DISCOVERY_TYPE
+  - name: DS_SEARCH__REQUEST_TIMEOUT
     value: "5.0"
   - name : LOG_LEVEL
     value: "INFO"
