@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**decentralized_search**](DecentralizedSearchApi.md#decentralized_search) | **POST** /search/ | Decentralized Search Across Catalogs
+[**distributed_search**](DecentralizedSearchApi.md#distributed_search) | **POST** /distributed-search/ | Decentralized Search Across Catalogs
 
 
-# **decentralized_search**
-> str decentralized_search(catalog_filters)
+# **distributed_search**
+> str distributed_search(request_body)
 
 Decentralized Search Across Catalogs
 
@@ -19,7 +19,6 @@ Search the across catalogs with dataset list.  The request accepts filters as a 
 
 ```python
 import ds_search_service
-from ds_search_service.models.catalog_filters import CatalogFilters
 from ds_search_service.rest import ApiException
 from pprint import pprint
 
@@ -34,15 +33,15 @@ configuration = ds_search_service.Configuration(
 with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ds_search_service.DecentralizedSearchApi(api_client)
-    catalog_filters = ds_search_service.CatalogFilters() # CatalogFilters | 
+    request_body = None # Dict[str, object] | 
 
     try:
         # Decentralized Search Across Catalogs
-        api_response = api_instance.decentralized_search(catalog_filters)
-        print("The response of DecentralizedSearchApi->decentralized_search:\n")
+        api_response = api_instance.distributed_search(request_body)
+        print("The response of DecentralizedSearchApi->distributed_search:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling DecentralizedSearchApi->decentralized_search: %s\n" % e)
+        print("Exception when calling DecentralizedSearchApi->distributed_search: %s\n" % e)
 ```
 
 
@@ -52,7 +51,7 @@ with ds_search_service.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **catalog_filters** | [**CatalogFilters**](CatalogFilters.md)|  | 
+ **request_body** | [**Dict[str, object]**](object.md)|  | 
 
 ### Return type
 

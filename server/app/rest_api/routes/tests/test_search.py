@@ -16,10 +16,7 @@ client = TestClient(app)  # Use the app instance instead of the router
 
 @patch("app.rest_api.routes.search.get_user")
 @patch("app.rest_api.routes.search.get_usecases")
-def test_search_catalog(mock_get_usecases, mock_get_user):
-    """
-    Test the /search-catalog/ endpoint.
-    """
+def test_local_search(mock_get_usecases, mock_get_user):
     # Mock dependencies
     mock_user = person_factory()
     mock_get_user.return_value = mock_user
@@ -42,8 +39,8 @@ def test_search_catalog(mock_get_usecases, mock_get_user):
         format="turtle",
     )
 
-    # Mock the query_local_catalog method to return the mocked graph
-    mock_usecases.query_local_catalog.return_value = mocked_graph
+    # Mock the local_search method to return the mocked graph
+    mock_usecases.local_search.return_value = mocked_graph
     mock_get_usecases.return_value = mock_usecases
 
     # Override the dependency in the FastAPI app
@@ -78,7 +75,7 @@ def test_search_catalog(mock_get_usecases, mock_get_user):
     catalog_filters = CatalogFilters(**filters)
 
     # Make the request
-    response = client.post("/search-catalog/", json=filters)
+    response = client.post("/local-search/", json=filters)
 
     # Assertions
     assert response.status_code == 200
@@ -86,7 +83,7 @@ def test_search_catalog(mock_get_usecases, mock_get_user):
     assert "@type" in response.json()
 
     # Ensure the mocked method was awaited with the correct argument
-    mock_usecases.query_local_catalog.assert_awaited_once_with(catalog_filters)
+    mock_usecases.local_search.assert_awaited_once_with(catalog_filters)
 
     # Clean up the dependency override
     app.dependency_overrides = {}
@@ -94,19 +91,16 @@ def test_search_catalog(mock_get_usecases, mock_get_user):
 
 @patch("app.rest_api.routes.search.get_user")
 @patch("app.rest_api.routes.search.get_usecases")
-def test_search_across_catalogs(mock_get_usecases, mock_get_user):
-    """
-    Test the /search/ endpoint.
-    """
+def test_distributed_search(mock_get_usecases, mock_get_user):
     # Mock dependencies
     mock_user = person_factory()
     mock_get_user.return_value = mock_user
 
     mock_usecases = AsyncMock()
 
-    # Create mocked rdflib.Graph objects
-    mocked_graph_1 = Graph()
-    mocked_graph_1.parse(
+    # Create mocked rdflib.Graph object
+    mocked_graph = Graph()
+    mocked_graph.parse(
         data="""
     @prefix dcat: <http://www.w3.org/ns/dcat#> .
     @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -116,30 +110,17 @@ def test_search_across_catalogs(mock_get_usecases, mock_get_user):
         dcterms:title "Local catalog"^^xsd:string ;
         dcterms:description "My local catalog1"^^xsd:string ;
         dcterms:identifier "c3c47c94-dacd-452d-ba21-07bf93e77559"^^xsd:string .
-""",
-        format="turtle",
-    )
 
-    mocked_graph_2 = Graph()
-    mocked_graph_2.parse(
-        data="""
-    @prefix dcat: <http://www.w3.org/ns/dcat#> .
-    @prefix dcterms: <http://purl.org/dc/terms/> .
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-
-    <http://neo4j.com/base/b3b47c94-dacd-452d-ba21-07bf93e77559> a dcat:Catalog ;
+    <http://neo4j.com/base/b3b47c94-dacd-452d-ba21-07bf93e77578> a dcat:Catalog ;
         dcterms:title "Local catalog2"^^xsd:string ;
         dcterms:description "My local catalog"^^xsd:string ;
-        dcterms:identifier "b3b47c94-dacd-452d-ba21-07bf93e77559"^^xsd:string .
+        dcterms:identifier "b3b47c94-dacd-452d-ba21-07bf93e77578"^^xsd:string .
 """,
         format="turtle",
     )
 
-    # Mock the aggregate_catalog_responses method to return a list of mocked graphs
-    mock_usecases.aggregate_catalog_responses.return_value = [
-        mocked_graph_1,
-        mocked_graph_2,
-    ]
+    # Mock the distributed_search method to return a list of mocked graphs
+    mock_usecases.distributed_search.return_value = mocked_graph
     mock_get_usecases.return_value = mock_usecases
 
     # Override the dependency in the FastAPI app
@@ -174,16 +155,16 @@ def test_search_across_catalogs(mock_get_usecases, mock_get_user):
     catalog_filters = CatalogFilters(**filters)
 
     # Make the request
-    response = client.post("/search/", json=filters)
+    response = client.post("/distributed-search/", json=filters)
 
     # Assertions
     assert response.status_code == 200
-    assert len(response.json()) == 2  # Ensure two graphs are returned
-    assert "@context" in response.json()
-    assert "@graph" in response.json()
+    data = response.json()
+    assert "@context" in data
+    assert "@graph" in data
 
     # Ensure the mocked method was awaited with the correct argument
-    mock_usecases.aggregate_catalog_responses.assert_awaited_once_with(catalog_filters)
+    mock_usecases.distributed_search.assert_awaited_once_with(catalog_filters)
 
     # Clean up the dependency override
     app.dependency_overrides = {}

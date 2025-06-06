@@ -25,7 +25,7 @@ from typing_extensions import Self
 
 class HealthCheck(BaseModel):
     """
-    Health check response model.
+    Health check response model
     """ # noqa: E501
     status: StrictStr
     __properties: ClassVar[List[str]] = ["status"]

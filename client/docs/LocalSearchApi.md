@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**search_catalog**](LocalSearchApi.md#search_catalog) | **POST** /search-catalog/ | Search Local Catalog
+[**local_search**](LocalSearchApi.md#local_search) | **POST** /local-search/ | Search Local Catalog
 
 
-# **search_catalog**
-> str search_catalog(catalog_filters)
+# **local_search**
+> str local_search(request_body)
 
 Search Local Catalog
 
@@ -19,7 +19,6 @@ Search the local catalog with dataset list.  The request accepts filters as a JS
 
 ```python
 import ds_search_service
-from ds_search_service.models.catalog_filters import CatalogFilters
 from ds_search_service.rest import ApiException
 from pprint import pprint
 
@@ -34,15 +33,15 @@ configuration = ds_search_service.Configuration(
 with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ds_search_service.LocalSearchApi(api_client)
-    catalog_filters = ds_search_service.CatalogFilters() # CatalogFilters | 
+    request_body = None # Dict[str, object] | 
 
     try:
         # Search Local Catalog
-        api_response = api_instance.search_catalog(catalog_filters)
-        print("The response of LocalSearchApi->search_catalog:\n")
+        api_response = api_instance.local_search(request_body)
+        print("The response of LocalSearchApi->local_search:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling LocalSearchApi->search_catalog: %s\n" % e)
+        print("Exception when calling LocalSearchApi->local_search: %s\n" % e)
 ```
 
 
@@ -52,7 +51,7 @@ with ds_search_service.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **catalog_filters** | [**CatalogFilters**](CatalogFilters.md)|  | 
+ **request_body** | [**Dict[str, object]**](object.md)|  | 
 
 ### Return type
 

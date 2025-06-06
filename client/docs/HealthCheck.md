@@ -1,6 +1,6 @@
 # HealthCheck
 
-Health check response model.
+Health check response model
 
 ## Properties
 
