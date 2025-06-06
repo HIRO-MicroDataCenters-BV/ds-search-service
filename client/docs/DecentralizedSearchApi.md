@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **distributed_search**
-> str distributed_search(request_body, settings=settings)
+> str distributed_search(request_body)
 
 Decentralized Search Across Catalogs
 
@@ -34,11 +34,10 @@ with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ds_search_service.DecentralizedSearchApi(api_client)
     request_body = None # Dict[str, object] | 
-    settings = None # object |  (optional)
 
     try:
         # Decentralized Search Across Catalogs
-        api_response = api_instance.distributed_search(request_body, settings=settings)
+        api_response = api_instance.distributed_search(request_body)
         print("The response of DecentralizedSearchApi->distributed_search:\n")
         pprint(api_response)
     except Exception as e:
@@ -53,7 +52,6 @@ with ds_search_service.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **request_body** | [**Dict[str, object]**](object.md)|  | 
- **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 

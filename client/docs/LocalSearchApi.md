@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **local_search**
-> str local_search(request_body, settings=settings)
+> str local_search(request_body)
 
 Search Local Catalog
 
@@ -34,11 +34,10 @@ with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ds_search_service.LocalSearchApi(api_client)
     request_body = None # Dict[str, object] | 
-    settings = None # object |  (optional)
 
     try:
         # Search Local Catalog
-        api_response = api_instance.local_search(request_body, settings=settings)
+        api_response = api_instance.local_search(request_body)
         print("The response of LocalSearchApi->local_search:\n")
         pprint(api_response)
     except Exception as e:
@@ -53,7 +52,6 @@ with ds_search_service.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **request_body** | [**Dict[str, object]**](object.md)|  | 
- **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 

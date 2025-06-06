@@ -6,7 +6,7 @@ from classy_fastapi import Routable, post
 from fastapi import Depends
 
 from app.core import discovery, entities, usecases
-from app.settings import get_settings
+from app.settings import Settings, get_settings
 
 from ..depends import get_user
 from ..examples import catalog_filters_example, decentralized_catalog_filters_example
@@ -17,7 +17,7 @@ from ..tags import Tags
 logger = logging.getLogger(__name__)
 
 
-def get_usecases(settings=get_settings()):
+def get_usecases(settings: Settings = Depends(get_settings)) -> usecases.SearchUsecases:
     """Dependency to get the usecases instance"""
 
     discovery_service: discovery.IDiscoveryService

@@ -17,7 +17,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ds_search_service.api_client import ApiClient, RequestSerialized
 from ds_search_service.api_response import ApiResponse
@@ -41,7 +41,6 @@ class LocalSearchApi:
     def local_search(
         self,
         request_body: Dict[str, Any],
-        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -61,8 +60,6 @@ class LocalSearchApi:
 
         :param request_body: (required)
         :type request_body: Dict[str, object]
-        :param settings:
-        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -87,7 +84,6 @@ class LocalSearchApi:
 
         _param = self._local_search_serialize(
             request_body=request_body,
-            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -113,7 +109,6 @@ class LocalSearchApi:
     def local_search_with_http_info(
         self,
         request_body: Dict[str, Any],
-        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -133,8 +128,6 @@ class LocalSearchApi:
 
         :param request_body: (required)
         :type request_body: Dict[str, object]
-        :param settings:
-        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -159,7 +152,6 @@ class LocalSearchApi:
 
         _param = self._local_search_serialize(
             request_body=request_body,
-            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -185,7 +177,6 @@ class LocalSearchApi:
     def local_search_without_preload_content(
         self,
         request_body: Dict[str, Any],
-        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -205,8 +196,6 @@ class LocalSearchApi:
 
         :param request_body: (required)
         :type request_body: Dict[str, object]
-        :param settings:
-        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -231,7 +220,6 @@ class LocalSearchApi:
 
         _param = self._local_search_serialize(
             request_body=request_body,
-            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -252,7 +240,6 @@ class LocalSearchApi:
     def _local_search_serialize(
         self,
         request_body,
-        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -273,10 +260,6 @@ class LocalSearchApi:
 
         # process the path parameters
         # process the query parameters
-        if settings is not None:
-            
-            _query_params.append(('settings', settings))
-            
         # process the header parameters
         # process the form parameters
         # process the body parameter

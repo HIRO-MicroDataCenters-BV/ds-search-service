@@ -58,28 +58,12 @@ paths:
 
         https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html#tag/Catalog/operation/get_catalog'
       operationId: local_search
-      parameters:
-      - name: settings
-        in: query
-        required: false
-        schema:
-          default:
-            pod_namespace: default
-            service_name: search-service
-            service_port: 8000
-            catalog_service_url: http://localhost:8000
-            request_timeout: 5.0
-            discovery_type: dummy
-            dummy_search_service_urls:
-            - https://ds-search.hus.nextgen.hiro-develop.nl
-            - https://ds-search.ki.nextgen.hiro-develop.nl
-          title: Settings
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CatalogFilters'
+        required: true
       responses:
         '200':
           description: Successful Response
@@ -125,28 +109,12 @@ paths:
 
         https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html'
       operationId: distributed_search
-      parameters:
-      - name: settings
-        in: query
-        required: false
-        schema:
-          default:
-            pod_namespace: default
-            service_name: search-service
-            service_port: 8000
-            catalog_service_url: http://localhost:8000
-            request_timeout: 5.0
-            discovery_type: dummy
-            dummy_search_service_urls:
-            - https://ds-search.hus.nextgen.hiro-develop.nl
-            - https://ds-search.ki.nextgen.hiro-develop.nl
-          title: Settings
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CatalogFilters'
+        required: true
       responses:
         '200':
           description: Successful Response
