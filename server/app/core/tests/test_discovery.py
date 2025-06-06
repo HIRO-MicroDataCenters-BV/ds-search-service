@@ -21,16 +21,14 @@ class TestKubeDiscoveryService:
         namespace = "default"
         service_name = "my-service"
         service_port = 8080
-        current_ip = "10.0.0.1"
         other_ips = ["10.0.0.1", "10.0.0.2", "10.0.0.3"]
 
         service = KubeDiscoveryService(namespace, service_name, service_port)
 
-        with patch("socket.gethostname", return_value="host"), patch(
-            "socket.gethostbyname", return_value=current_ip
-        ), patch("socket.gethostbyname_ex", return_value=("fqdn", [], other_ips)):
+        with patch("socket.gethostbyname_ex", return_value=("fqdn", [], other_ips)):
             discovered = await service.discover()
             assert discovered == [
+                f"http://10.0.0.1:{service_port}",
                 f"http://10.0.0.2:{service_port}",
                 f"http://10.0.0.3:{service_port}",
             ]

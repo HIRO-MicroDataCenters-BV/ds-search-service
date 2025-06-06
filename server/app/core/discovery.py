@@ -21,26 +21,12 @@ class KubeDiscoveryService(IDiscoveryService):
         self._service_name = service_name
         self._service_port = service_port
 
-    async def _get_current_ip(self) -> str:
-        """Get the current IP address of the machine"""
-        try:
-            hostname = socket.gethostname()
-            ip_address = socket.gethostbyname(hostname)
-            logger.info(f"Resolved IP address: {ip_address}")
-        except socket.gaierror as err:
-            logger.exception("Error: Unable to resolve hostname")
-            raise err
-        return ip_address
-
     async def discover(self) -> List[str]:
         try:
-            current_ip = await self._get_current_ip()
             _, _, ips = socket.gethostbyname_ex(
                 f"{self._service_name}.{self._namespace}.svc.cluster.local"
             )
-            peer_services = [
-                f"http://{ip}:{self._service_port}" for ip in ips if ip != current_ip
-            ]
+            peer_services = [f"http://{ip}:{self._service_port}" for ip in ips]
             logger.info(f"Discovered peer services: {peer_services}")
             return peer_services
         except Exception as e:
