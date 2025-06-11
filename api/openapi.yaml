@@ -402,6 +402,7 @@ components:
     CatalogFilters:
       properties:
         '@context':
+          additionalProperties: true
           type: object
           title: '@Context'
         '@type':
@@ -409,6 +410,7 @@ components:
           title: '@Type'
         filters:
           items:
+            additionalProperties: true
             type: object
           type: array
           title: Filters

@@ -101,7 +101,6 @@ class CatalogFilters(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "@context": obj.get("@context"),
             "@type": obj.get("@type"),
             "filters": obj.get("filters")
         })
