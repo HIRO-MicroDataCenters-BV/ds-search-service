@@ -12,6 +12,16 @@ entries:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
+    appVersion: 0.2.0-dev.51.gh-pages.0fd97c44
+    created: "2025-06-11T08:35:15.157988666Z"
+    description: Web server
+    digest: 7c30b2ea4f028cf9782464c12ca33966566886cfc8dcb9994546a3bcab8b8dce
+    name: server
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.2.0-dev.51.gh-pages.0fd97c44.tgz
+    version: 0.2.0-dev.51.gh-pages.0fd97c44
+  - apiVersion: v2
     appVersion: 0.2.0-dev.40.gh-pages.f187faa7
     created: "2025-06-03T08:37:57.37863748Z"
     description: Web server
@@ -391,4 +401,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-06-11T08:31:29.496331287Z"
+generated: "2025-06-11T08:35:15.156560074Z"
