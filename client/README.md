@@ -99,15 +99,15 @@ configuration = ds_search_service.Configuration(
 with ds_search_service.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ds_search_service.DecentralizedSearchApi(api_client)
-    catalog_filters = ds_search_service.CatalogFilters() # CatalogFilters | 
+    request_body = None # Dict[str, object] | 
 
     try:
         # Decentralized Search Across Catalogs
-        api_response = api_instance.decentralized_search(catalog_filters)
-        print("The response of DecentralizedSearchApi->decentralized_search:\n")
+        api_response = api_instance.distributed_search(request_body)
+        print("The response of DecentralizedSearchApi->distributed_search:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling DecentralizedSearchApi->decentralized_search: %s\n" % e)
+        print("Exception when calling DecentralizedSearchApi->distributed_search: %s\n" % e)
 
 ```
 
@@ -117,15 +117,14 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DecentralizedSearchApi* | [**decentralized_search**](docs/DecentralizedSearchApi.md#decentralized_search) | **POST** /search/ | Decentralized Search Across Catalogs
-*LocalSearchApi* | [**search_catalog**](docs/LocalSearchApi.md#search_catalog) | **POST** /search-catalog/ | Search Local Catalog
+*DecentralizedSearchApi* | [**distributed_search**](docs/DecentralizedSearchApi.md#distributed_search) | **POST** /distributed-search/ | Decentralized Search Across Catalogs
+*LocalSearchApi* | [**local_search**](docs/LocalSearchApi.md#local_search) | **POST** /local-search/ | Search Local Catalog
 *DefaultApi* | [**health_check**](docs/DefaultApi.md#health_check) | **GET** /health-check | Health check
 *DefaultApi* | [**metrics_metrics_get**](docs/DefaultApi.md#metrics_metrics_get) | **GET** /metrics | Metrics
 
 
 ## Documentation For Models
 
- - [CatalogFilters](docs/CatalogFilters.md)
  - [HTTPValidationError](docs/HTTPValidationError.md)
  - [HealthCheck](docs/HealthCheck.md)
  - [ValidationError](docs/ValidationError.md)

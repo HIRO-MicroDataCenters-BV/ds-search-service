@@ -1,5 +1,4 @@
 README.md
-docs/CatalogFilters.md
 docs/DecentralizedSearchApi.md
 docs/DefaultApi.md
 docs/HTTPValidationError.md
@@ -17,7 +16,6 @@ ds_search_service/api_response.py
 ds_search_service/configuration.py
 ds_search_service/exceptions.py
 ds_search_service/models/__init__.py
-ds_search_service/models/catalog_filters.py
 ds_search_service/models/health_check.py
 ds_search_service/models/http_validation_error.py
 ds_search_service/models/validation_error.py

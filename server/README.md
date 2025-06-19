@@ -16,7 +16,18 @@ poetry config virtualenvs.in-project true
 poetry install --no-root --with dev,test
 ```
 
-3. Launch the project:
+3. Create .env file from the template .env.template:
+```bash
+DS_SEARCH__POD_NAMESPACE=<namespace>
+DS_SEARCH__SERVICE_NAME=<search service name>
+DS_SEARCH__SERVICE_PORT=<catalog service port>
+DS_SEARCH__CATALOG_SERVICE_URL=<catalog service URL>
+DS_SEARCH__REQUEST_TIMEOUT=5.0
+DS_SEARCH__DISCOVERY_TYPE=kube  # or dummy
+DS_SEARCH__DUMMY_SEARCH_SERVICE_URLS=<list of search service URLs>
+```
+
+4. Launch the project:
 ```bash
 poetry run uvicorn app.main:app --reload
 ```
@@ -26,7 +37,7 @@ poetry shell
 uvicorn app.main:app
 ```
 
-4. Running tests:
+1. Running tests:
 ```bash
 poetry run pytest
 ```

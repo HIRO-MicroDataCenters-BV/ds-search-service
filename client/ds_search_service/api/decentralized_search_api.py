@@ -17,7 +17,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from ds_search_service.models.catalog_filters import CatalogFilters
+from typing import Any, Dict
 
 from ds_search_service.api_client import ApiClient, RequestSerialized
 from ds_search_service.api_response import ApiResponse
@@ -38,9 +38,9 @@ class DecentralizedSearchApi:
 
 
     @validate_call
-    def decentralized_search(
+    def distributed_search(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -58,8 +58,8 @@ class DecentralizedSearchApi:
 
         Search the across catalogs with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation. https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -82,8 +82,8 @@ class DecentralizedSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._decentralized_search_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._distributed_search_serialize(
+            request_body=request_body,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -106,9 +106,9 @@ class DecentralizedSearchApi:
 
 
     @validate_call
-    def decentralized_search_with_http_info(
+    def distributed_search_with_http_info(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -126,8 +126,8 @@ class DecentralizedSearchApi:
 
         Search the across catalogs with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation. https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -150,8 +150,8 @@ class DecentralizedSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._decentralized_search_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._distributed_search_serialize(
+            request_body=request_body,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -174,9 +174,9 @@ class DecentralizedSearchApi:
 
 
     @validate_call
-    def decentralized_search_without_preload_content(
+    def distributed_search_without_preload_content(
         self,
-        catalog_filters: CatalogFilters,
+        request_body: Dict[str, Any],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -194,8 +194,8 @@ class DecentralizedSearchApi:
 
         Search the across catalogs with dataset list.  The request accepts filters as a JSON-LD object in the body.  ### Format: Filters are structured as nested JSON-LD objects. Each filter defines the path to the field with optional operators or language annotations.  for details, check ds-catalog-service documentation. https://hiro-microdatacenters-bv.github.io/ds-catalog/docs/index.html
 
-        :param catalog_filters: (required)
-        :type catalog_filters: CatalogFilters
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -218,8 +218,8 @@ class DecentralizedSearchApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._decentralized_search_serialize(
-            catalog_filters=catalog_filters,
+        _param = self._distributed_search_serialize(
+            request_body=request_body,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -237,9 +237,9 @@ class DecentralizedSearchApi:
         return response_data.response
 
 
-    def _decentralized_search_serialize(
+    def _distributed_search_serialize(
         self,
-        catalog_filters,
+        request_body,
         _request_auth,
         _content_type,
         _headers,
@@ -263,8 +263,8 @@ class DecentralizedSearchApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if catalog_filters is not None:
-            _body_params = catalog_filters
+        if request_body is not None:
+            _body_params = request_body
 
 
         # set the HTTP header `Accept`
@@ -295,7 +295,7 @@ class DecentralizedSearchApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/search/',
+            resource_path='/distributed-search/',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
