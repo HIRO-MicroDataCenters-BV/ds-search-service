@@ -18,12 +18,12 @@ class TestDummyDiscoveryService:
 class TestKubeDiscoveryService:
     @pytest.mark.asyncio
     async def test_common(self):
-        namespace = "default"
+        peers_namespaces = ["default"]
         service_name = "my-service"
         service_port = 8080
         other_ips = ["10.0.0.1", "10.0.0.2", "10.0.0.3"]
 
-        service = KubeDiscoveryService(namespace, service_name, service_port)
+        service = KubeDiscoveryService(peers_namespaces, service_name, service_port)
 
         with patch("socket.gethostbyname_ex", return_value=("fqdn", [], other_ips)):
             discovered = await service.discover()
@@ -35,9 +35,9 @@ class TestKubeDiscoveryService:
 
     @pytest.mark.asyncio
     async def test_failure(self):
-        service = KubeDiscoveryService("default", "my-service", 8080)
-        with patch("socket.gethostname", return_value="host"), patch(
-            "socket.gethostbyname", side_effect=socket.gaierror("test error")
+        service = KubeDiscoveryService(["default"], "my-service", 8080)
+        with patch(
+            "socket.gethostbyname_ex", side_effect=socket.gaierror("test error")
         ):
             result = await service.discover()
             assert result == []
