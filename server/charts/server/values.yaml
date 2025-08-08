@@ -45,9 +45,8 @@ service:
   port: 8080
 
 env:
-## CRITICAL: fix this environment variables and check the discovery mechanism
-  - name: DS_SEARCH__POD_NAMESPACE
-    value: "nextgen"
+  - name: DS_SEARCH__PEERS_NAMESPACES
+    value: "ki,hus,uva"
   - name: DS_SEARCH__SERVICE_NAME
     value: "ds-search"
   - name: DS_SEARCH__SERVICE_PORT

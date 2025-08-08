@@ -27,8 +27,9 @@ def get_usecases(settings: Settings = Depends(get_settings)) -> usecases.SearchU
             search_service_urls=settings.dummy_search_service_urls,
         )
     elif settings.discovery_type == "kube":
+        peers_namespaces = settings.peers_namespaces
         discovery_service = discovery.KubeDiscoveryService(
-            namespace=settings.pod_namespace,
+            namespaces=peers_namespaces,
             service_name=settings.service_name,
             service_port=settings.service_port,
         )
