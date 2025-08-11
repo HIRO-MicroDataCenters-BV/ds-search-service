@@ -1,5 +1,5 @@
 {{- if .Values.metrics.enabled }}
-rsion: monitoring.coreos.com/v1
+apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "app.fullname" . }}-metrics
