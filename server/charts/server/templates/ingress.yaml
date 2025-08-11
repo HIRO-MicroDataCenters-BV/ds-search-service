@@ -11,22 +11,18 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    {{- range .Values.ingress.nodes }}
-    - host: ds-search.{{ .nodeId }}.{{ $.Values.ingress.host }}
+    - host: ds-search.{{ .Values.namespace | default .Release.Namespace }}.{{ .Values.ingress.host }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ include "app.fullname" $ }}-{{ .nodeId }}
+                name: {{ include "app.fullname" . }}
                 port:
                   number: 80
-    {{- end }}
   tls:
     - hosts:
-        {{- range .Values.ingress.nodes }}
-        - ds-search.{{ .nodeId }}.{{ $.Values.ingress.host }}
-        {{- end }}
+        - ds-search.{{ .Values.namespace | default .Release.Namespace }}.{{ .Values.ingress.host }}
       secretName: {{ include "app.fullname" . }}-tls-secret
 {{- end }}
