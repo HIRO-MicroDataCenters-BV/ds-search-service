@@ -16,22 +16,30 @@ class IDiscoveryService(ABC):
 class KubeDiscoveryService(IDiscoveryService):
     """Discover other search services pod using k8s DNS"""
 
-    def __init__(self, namespace: str, service_name: str, service_port: int) -> None:
-        self._namespace = namespace
+    def __init__(
+        self, namespaces: list[str], service_name: str, service_port: int
+    ) -> None:
+        self._namespaces = namespaces
         self._service_name = service_name
         self._service_port = service_port
 
     async def discover(self) -> List[str]:
-        try:
-            _, _, ips = socket.gethostbyname_ex(
-                f"{self._service_name}.{self._namespace}.svc.cluster.local"
-            )
-            peer_services = [f"http://{ip}:{self._service_port}" for ip in ips]
-            logger.info(f"Discovered peer services: {peer_services}")
-            return peer_services
-        except Exception as e:
-            logger.error(f"Error discovering peer services: {e}")
-            return []
+        peer_services = []
+        for namespace in self._namespaces:
+            try:
+                _, _, ips = socket.gethostbyname_ex(
+                    f"{self._service_name}.{namespace}.svc.cluster.local"
+                )
+                services = [f"http://{ip}:{self._service_port}" for ip in ips]
+                logger.info(
+                    f"Discovered peer services in namespace '{namespace}': {services}"
+                )
+                peer_services.extend(services)
+            except Exception as e:
+                logger.error(
+                    f"Error discovering peer services in namespace '{namespace}': {e}"
+                )
+        return peer_services
 
 
 class DummyDiscoveryService(IDiscoveryService):
