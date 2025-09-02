@@ -18,7 +18,7 @@ poetry install --no-root --with dev,test
 
 3. Create .env file from the template .env.template:
 ```bash
-DS_SEARCH__POD_NAMESPACE=<namespace>
+DS_SEARCH__PEERS_NAMESPACES=<list of peers namespaces>
 DS_SEARCH__SERVICE_NAME=<search service name>
 DS_SEARCH__SERVICE_PORT=<catalog service port>
 DS_SEARCH__CATALOG_SERVICE_URL=<catalog service URL>

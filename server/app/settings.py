@@ -5,6 +5,15 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    peers_namespaces: Annotated[list[str], NoDecode] = ["ki", "hus", "uva"]
+
+    @field_validator("peers_namespaces", mode="before")
+    @classmethod
+    def parse_peers_namespaces(cls, v):
+        if isinstance(v, str):
+            return [s.strip() for s in v.split(",") if s.strip()]
+        return v
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -14,7 +23,6 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    pod_namespace: str = "default"
     service_name: str = "search-service"
     service_port: int = 8000
 
