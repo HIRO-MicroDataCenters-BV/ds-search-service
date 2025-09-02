@@ -12,6 +12,16 @@ entries:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/ds-search-0.2.2-dev.8.update-daemonset.c70c072b.tgz
     version: 0.2.2-dev.8.update-daemonset.c70c072b
   - apiVersion: v2
+    appVersion: 0.2.2-dev.8.develop.37620c3f
+    created: "2025-09-02T09:59:05.340379578Z"
+    description: Web server
+    digest: cf4e44cb1d23075a71534485859b339bc6ff1fc4d089646abf9aff211477409b
+    name: ds-search
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/ds-search-0.2.2-dev.8.develop.37620c3f.tgz
+    version: 0.2.2-dev.8.develop.37620c3f
+  - apiVersion: v2
     appVersion: 0.2.2-dev.7.daemonset-to-dep.25296d58
     created: "2025-08-19T10:49:18.735269085Z"
     description: Web server
@@ -592,4 +602,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-08-19T11:20:25.279169181Z"
+generated: "2025-09-02T09:59:05.339352024Z"
