@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   ds-search:
   - apiVersion: v2
+    appVersion: 0.2.2-dev.11.refactor-chart-c.5de40108
+    created: "2025-10-23T15:13:20.777354057Z"
+    description: Web server
+    digest: 6d397c3dea2ad2e0065cd29ed8b56b3cb9a76adbb8fa5e6d5bc89830425ece7a
+    name: ds-search
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/ds-search-0.2.2-dev.11.refactor-chart-c.5de40108.tgz
+    version: 0.2.2-dev.11.refactor-chart-c.5de40108
+  - apiVersion: v2
     appVersion: 0.2.2-dev.10.chart-cleaning.0373d39d
     created: "2025-10-23T14:40:17.318953715Z"
     description: Web server
@@ -612,4 +622,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-10-23T14:40:17.317525181Z"
+generated: "2025-10-23T15:13:20.776779148Z"
