@@ -13,7 +13,6 @@ namespace: nextgen
 nameOverride: "ds-search"
 fullnameOverride: "ds-search"
 
-## TODO: check do I need this or not
 serviceAccount:
   create: true
   automount: true
@@ -69,8 +68,7 @@ resources:
 deploymentMode: deployment  # or "daemonset"
 
 
-# Optional nodeSelector & tolerations
-nodeSelector: {}
+# Optional tolerations
 tolerations: []
 
 ingress:
