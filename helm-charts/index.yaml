@@ -12,6 +12,16 @@ entries:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/ds-search-0.2.2-dev.11.refactor-chart-c.5de40108.tgz
     version: 0.2.2-dev.11.refactor-chart-c.5de40108
   - apiVersion: v2
+    appVersion: 0.2.2-dev.11.develop.202a9b7b
+    created: "2025-10-27T13:21:39.115815602Z"
+    description: Web server
+    digest: 1620165471d96eac33fb9491b3f54b5e0fc8d30bd8fbe03dececb1b8b6a9c3f4
+    name: ds-search
+    type: application
+    urls:
+    - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/ds-search-0.2.2-dev.11.develop.202a9b7b.tgz
+    version: 0.2.2-dev.11.develop.202a9b7b
+  - apiVersion: v2
     appVersion: 0.2.2-dev.10.chart-cleaning.0373d39d
     created: "2025-10-23T14:40:17.318953715Z"
     description: Web server
@@ -622,4 +632,4 @@ entries:
     urls:
     - https://HIRO-MicroDataCenters-BV.github.io/ds-search-service/helm-charts/server-0.0.1.tgz
     version: 0.0.1
-generated: "2025-10-23T15:13:20.776779148Z"
+generated: "2025-10-27T13:21:39.11518357Z"
