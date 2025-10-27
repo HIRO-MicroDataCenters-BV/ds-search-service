@@ -48,9 +48,11 @@ make_version() {
     # Docker versions are set starting from the most generic to the most specific
     # so we can take the most generic one and set to the chart values later
     BRANCH_TOKEN=$(echo "${BRANCH//[^a-zA-Z0-9-_.]/-}" | cut -c1-16 | sed -e 's/-$//')
+    # For Helm chart version, replace underscores with hyphens to comply with SemVer
+    BRANCH_TOKEN_CHART="${BRANCH_TOKEN//_/-}"
 
     VERSION_APP="$VERSION_BASE+dev${GIT_COUNT}-${BRANCH_TOKEN}-${SHORT_SHA}"
-    VERSION_CHART="$VERSION_BASE-dev.${GIT_COUNT}.${BRANCH_TOKEN}.${SHORT_SHA}"
+    VERSION_CHART="$VERSION_BASE-dev.${GIT_COUNT}.${BRANCH_TOKEN_CHART}.${SHORT_SHA}"
     VERSION_DOCKER="$VERSION_CHART"
   fi
 
